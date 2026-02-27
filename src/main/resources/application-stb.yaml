@@ -1,0 +1,34 @@
+spring:
+  springdoc:
+    api-docs:
+      path: /v3/api-docs
+    swagger-ui:
+      path: /swagger-ui.html
+      operationsSorter: method
+      tagsSorter: alpha
+  messages:
+    basename: messages
+    encoding: UTF-8
+  application:
+    name: transportation-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/transportation
+    username: transportation_user
+    password: transportation_pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+logging:
+  level:
+    liquibase: DEBUG
+

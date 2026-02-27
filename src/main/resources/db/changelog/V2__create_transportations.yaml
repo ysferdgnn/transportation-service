@@ -1,0 +1,116 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2-create-transportations
+      author: yusuf
+      changes:
+        - createTable:
+            tableName: transportations
+            remarks: "Transportation records between locations"
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_transportations
+                    nullable: false
+
+              - column:
+                  name: origin_location_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: destination_location_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: transportation_type
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: transportations
+            baseColumnNames: origin_location_id
+            referencedTableName: locations
+            referencedColumnNames: id
+            constraintName: fk_transportations_origin_location
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+
+        - addForeignKeyConstraint:
+            baseTableName: transportations
+            baseColumnNames: destination_location_id
+            referencedTableName: locations
+            referencedColumnNames: id
+            constraintName: fk_transportations_destination_location
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+
+        - createIndex:
+            tableName: transportations
+            indexName: ix_transportations_origin
+            columns:
+              - column:
+                  name: origin_location_id
+
+        - createIndex:
+            tableName: transportations
+            indexName: ix_transportations_destination
+            columns:
+              - column:
+                  name: destination_location_id
+
+        - createIndex:
+            tableName: transportations
+            indexName: ix_transportations_type
+            columns:
+              - column:
+                  name: transportation_type
+
+  - changeSet:
+      id: 3-create-transportation-operating-days
+      author: yusuf
+      changes:
+        - createTable:
+            tableName: transportation_operating_days
+            remarks: "Operating days for a transportation (ElementCollection)"
+            columns:
+              - column:
+                  name: transportation_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: day_of_week
+                  type: INT
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: transportation_operating_days
+            baseColumnNames: transportation_id
+            referencedTableName: transportations
+            referencedColumnNames: id
+            constraintName: fk_transportation_operating_days_transportation
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+
+        - createIndex:
+            tableName: transportation_operating_days
+            indexName: ix_transportation_operating_days_transportation
+            columns:
+              - column:
+                  name: transportation_id
+
+        # (opsiyonel ama çok iyi) Aynı gün 2 kez eklenmesin:
+        - addUniqueConstraint:
+            tableName: transportation_operating_days
+            columnNames: transportation_id, day_of_week
+            constraintName: uk_transportation_operating_days
