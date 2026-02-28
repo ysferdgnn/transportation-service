@@ -17,7 +17,7 @@ import java.util.List;
 public class RouteService {
 
     private final TransportationRepository transportationRepository;
-    private final RouteFinder routeFinder = new RouteFinder();
+    private final RouteFinder routeFinder;
 
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = "routes", key = "#originCode + '|' + #destinationCode + '|' + #date")
