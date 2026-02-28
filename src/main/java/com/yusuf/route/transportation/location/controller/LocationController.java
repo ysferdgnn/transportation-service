@@ -82,5 +82,12 @@ public class LocationController {
         return BaseResponse.ok(locationService.get(id));
     }
 
+    @DeleteMapping("/{id}")
+
+    public void delete( @Parameter(description = "Location id", example = "1")
+                            @PathVariable Long id){
+        locationService.delete(id);
+    }
+
 
 }

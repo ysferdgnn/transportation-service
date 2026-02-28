@@ -17,6 +17,16 @@ public enum ErrorCode {
             "Location not found",
             HttpStatus.NOT_FOUND
     ),
+    OPERATION_DAYS_RANGE(
+            "OPERATION_DAYS_RANGE",
+            "Operation Days Must Between Range",
+            HttpStatus.NOT_FOUND
+    ),
+    INVALID_IATA_CODE(
+            "INVALID_IATA_CODE",
+            "Airport locationCode must be a valid 3-letter IATA code",
+            HttpStatus.BAD_REQUEST
+    ),
 
     INVALID_REQUEST(
             "INVALID_REQUEST",

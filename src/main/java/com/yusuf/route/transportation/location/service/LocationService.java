@@ -1,14 +1,17 @@
 package com.yusuf.route.transportation.location.service;
 
+import com.yusuf.route.transportation.common.exception.IATAFormatException;
 import com.yusuf.route.transportation.location.dto.LocationCreateRequest;
 import com.yusuf.route.transportation.location.dto.LocationResponse;
 import com.yusuf.route.transportation.location.entity.Location;
+import com.yusuf.route.transportation.location.enums.LocationType;
 import com.yusuf.route.transportation.location.repository.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -21,13 +24,16 @@ public class LocationService {
         if (locationRepository.existsByLocationCode(req.locationCode())) {
             throw new IllegalArgumentException("locationCode already exists: " + req.locationCode());
         }
+        validateLocation(req);
 
-        Location saved = locationRepository.save(Location.builder()
+        Location locationEntity = Location.builder()
                 .locationCode(req.locationCode())
                 .name(req.name())
                 .city(req.city())
                 .country(req.country())
-                .build());
+                .type(req.type())
+                .build();
+        Location saved = locationRepository.save(locationEntity);
 
         return toResponse(saved);
     }
@@ -44,7 +50,24 @@ public class LocationService {
         return toResponse(loc);
     }
 
-    private LocationResponse toResponse(Location loc) {
-        return new LocationResponse(loc.getId(), loc.getLocationCode(), loc.getName(), loc.getCity(), loc.getCountry());
+    @Transactional
+    public void delete(Long id) {
+        locationRepository.deleteById(id);
     }
+
+    private LocationResponse toResponse(Location loc) {
+        return new LocationResponse(loc.getId(), loc.getLocationCode(), loc.getName(),
+                loc.getCity(), loc.getCountry(),loc.getType());
+    }
+    private static final Pattern IATA_PATTERN = Pattern.compile("^[A-Z]{3}$");
+
+    private void validateLocation(LocationCreateRequest req) {
+
+        if (req.type() == LocationType.AIRPORT) {
+            if (!IATA_PATTERN.matcher(req.locationCode()).matches()) {
+                throw new IATAFormatException();
+            }
+        }
+    }
+
 }

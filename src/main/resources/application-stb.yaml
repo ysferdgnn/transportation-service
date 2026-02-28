@@ -1,11 +1,4 @@
 spring:
-  springdoc:
-    api-docs:
-      path: /v3/api-docs
-    swagger-ui:
-      path: /swagger-ui.html
-      operationsSorter: method
-      tagsSorter: alpha
   messages:
     basename: messages
     encoding: UTF-8
@@ -24,16 +17,26 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        hibernate.default_batch_fetch_size: 50
 
   liquibase:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.yaml
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
 logging:
   level:
     liquibase: DEBUG
     org.springframework.security: DEBUG
     org.springframework.web: INFO
     org.springframework.boot.autoconfigure.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
 
 security:
   jwt:

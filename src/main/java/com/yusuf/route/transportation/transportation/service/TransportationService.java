@@ -1,6 +1,8 @@
 package com.yusuf.route.transportation.transportation.service;
 
 
+import com.yusuf.route.transportation.common.exception.LocationNotFoundException;
+import com.yusuf.route.transportation.common.exception.OperationDaysRangeException;
 import com.yusuf.route.transportation.location.entity.Location;
 import com.yusuf.route.transportation.location.repository.LocationRepository;
 import com.yusuf.route.transportation.transportation.dto.TransportationCreateRequest;
@@ -27,13 +29,11 @@ public class TransportationService {
 
         Location origin = locationRepository
                 .findByLocationCode(request.originCode())
-                .orElseThrow(() ->
-                        new IllegalArgumentException("Origin location not found"));
+                .orElseThrow(LocationNotFoundException::new);
 
         Location destination = locationRepository
                 .findByLocationCode(request.destinationCode())
-                .orElseThrow(() ->
-                        new IllegalArgumentException("Destination location not found"));
+                .orElseThrow(LocationNotFoundException::new);
 
         validateDays(request.operatingDays());
 
@@ -74,7 +74,7 @@ public class TransportationService {
                 .anyMatch(d -> d < 1 || d > 7);
 
         if (invalid) {
-            throw new IllegalArgumentException("Operating days must be between 1 and 7");
+            throw new OperationDaysRangeException();
         }
     }
 

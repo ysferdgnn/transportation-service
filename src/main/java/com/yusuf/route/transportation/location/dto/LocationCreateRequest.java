@@ -1,6 +1,8 @@
 package com.yusuf.route.transportation.location.dto;
 
+import com.yusuf.route.transportation.location.enums.LocationType;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record LocationCreateRequest(
 
@@ -14,5 +16,8 @@ public record LocationCreateRequest(
         String city,
 
         @NotBlank(message = "{validation.location.country.notBlank}")
-        String country
+        String country,
+
+        @NotNull(message = "{validation.location.type.notNull}")
+        LocationType type
 ) {}

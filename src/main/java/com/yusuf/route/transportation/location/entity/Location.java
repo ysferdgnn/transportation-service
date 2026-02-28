@@ -1,5 +1,6 @@
 package com.yusuf.route.transportation.location.entity;
 
+import com.yusuf.route.transportation.location.enums.LocationType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,4 +28,8 @@ public class Location {
 
     @Column(nullable = false, length = 120)
     private String country;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private LocationType type;
 }
