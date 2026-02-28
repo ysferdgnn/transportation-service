@@ -74,5 +74,12 @@ public class TransportationController {
         return BaseResponse.ok(transportationService.get(id));
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@Parameter(description = "Location id", example = "1")
+                       @PathVariable Long id){
+        transportationService.delete(id);
+    }
+
 
 }

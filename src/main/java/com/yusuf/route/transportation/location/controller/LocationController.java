@@ -83,7 +83,7 @@ public class LocationController {
     }
 
     @DeleteMapping("/{id}")
-
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete( @Parameter(description = "Location id", example = "1")
                             @PathVariable Long id){
         locationService.delete(id);

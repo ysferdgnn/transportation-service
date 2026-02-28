@@ -67,6 +67,11 @@ public class TransportationService {
         return map(t);
     }
 
+    @Transactional
+    public void delete(Long id) {
+        transportationRepository.deleteById(id);
+    }
+
     // ---------- helpers ----------
 
     private void validateDays(Set<Integer> days) {
@@ -87,4 +92,5 @@ public class TransportationService {
                 t.getOperatingDays()
         );
     }
+
 }
