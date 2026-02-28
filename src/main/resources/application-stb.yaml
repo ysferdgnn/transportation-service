@@ -31,4 +31,12 @@ spring:
 logging:
   level:
     liquibase: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: INFO
+    org.springframework.boot.autoconfigure.security: DEBUG
 
+security:
+  jwt:
+    issuer: "VerySecureIssuer"
+    secret: "CHANGE_ME_very_long_random_secret_min_32_chars"
+    access-token-ttl-minutes: 60

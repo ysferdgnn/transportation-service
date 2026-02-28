@@ -3,3 +3,8 @@ databaseChangeLog:
       file: db/changelog/V1__create_locations.yaml
   - include:
       file: db/changelog/V2__create_transportations.yaml
+  - include:
+      file: db/changelog/V3__create_users.yaml
+  - include:
+      file: db/changelog/002__seed_users.yaml
+

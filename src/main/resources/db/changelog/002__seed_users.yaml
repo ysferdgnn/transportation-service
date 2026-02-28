@@ -1,0 +1,50 @@
+databaseChangeLog:
+
+  # =========================
+  # USER 1 — YUSUF (ADMIN)
+  # =========================
+  - changeSet:
+      id: 2
+      author: yusuf
+      changes:
+
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: id, valueNumeric: 1 }
+              - column: { name: username, value: yusuf }
+              - column:
+                  name: password_hash
+                  value: "$2a$10$BgP1OWn6Rc2IhYZxf0npre1T6OoKcpks6yoGiwewmLHLTt7hnsOIm" # password: 1234
+              - column: { name: enabled, valueBoolean: true }
+
+        - insert:
+            tableName: user_roles
+            columns:
+              - column: { name: user_id, valueNumeric: 1 }
+              - column: { name: role, value: ADMIN }
+
+
+  # =========================
+  # USER 2 — SKYJET (AGENCY)
+  # =========================
+  - changeSet:
+      id: 3
+      author: yusuf
+      changes:
+
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: id, valueNumeric: 2 }
+              - column: { name: username, value: skyjet }
+              - column:
+                  name: password_hash
+                  value: "$2a$10$BgP1OWn6Rc2IhYZxf0npre1T6OoKcpks6yoGiwewmLHLTt7hnsOIm"
+              - column: { name: enabled, valueBoolean: true }
+
+        - insert:
+            tableName: user_roles
+            columns:
+              - column: { name: user_id, valueNumeric: 2 }
+              - column: { name: role, value: AGENCY }
