@@ -9,6 +9,7 @@ import com.yusuf.route.transportation.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -33,8 +34,9 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http,
                                     JwtService jwtService,
-                                    DaoAuthenticationProvider provider, RestAuthenticationEntryPoint entryPoint,
-                                    RestAccessDeniedHandler deniedHandler)  {
+                                    DaoAuthenticationProvider provider,
+                                    RestAuthenticationEntryPoint entryPoint,
+                                    RestAccessDeniedHandler deniedHandler) {
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -48,16 +50,27 @@ public class SecurityConfig {
                         sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(reg -> reg
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/locations/**").hasRole(Role.ADMIN.name())
-                        .requestMatchers("/api/transportations/**").hasRole(Role.ADMIN.name())
+
+                        .requestMatchers(HttpMethod.GET, "/api/locations/**")
+                        .hasAnyRole(Role.ADMIN.name(), Role.AGENCY.name())
+                        .requestMatchers("/api/locations/**")
+                        .hasRole(Role.ADMIN.name())
+
+                        .requestMatchers(HttpMethod.GET, "/api/transportations/**")
+                        .hasAnyRole(Role.ADMIN.name(), Role.AGENCY.name())
+                        .requestMatchers("/api/transportations/**")
+                        .hasRole(Role.ADMIN.name())
+
                         .requestMatchers("/api/routes", "/api/routes/**")
                         .hasAnyRole(Role.ADMIN.name(), Role.AGENCY.name())
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthFilter(jwtService),
                         UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
 
@@ -79,6 +92,7 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     AuthenticationManager authenticationManager(
             DaoAuthenticationProvider provider
@@ -99,6 +113,4 @@ public class SecurityConfig {
 
         return provider;
     }
-
-
 }

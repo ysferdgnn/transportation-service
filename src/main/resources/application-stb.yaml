@@ -1,45 +1,48 @@
 spring:
   messages:
-    basename: messages
-    encoding: UTF-8
+    basename: ${MESSAGES_BASENAME:messages}
+    encoding: ${MESSAGES_ENCODING:UTF-8}
+
   application:
-    name: transportation-service
+    name: ${APP_NAME:transportation-service}
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/transportation
-    username: transportation_user
-    password: transportation_pass
-    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/transportation}
+    username: ${DB_USER:transportation_user}
+    password: ${DB_PASS:transportation_pass}
+    driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: ${JPA_DDL_AUTO:validate}
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        hibernate.default_batch_fetch_size: 50
+        dialect: ${HIBERNATE_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
+        default_batch_fetch_size: ${HIBERNATE_BATCH_FETCH_SIZE:50}
 
   liquibase:
-    enabled: true
-    change-log: classpath:/db/changelog/db.changelog-master.yaml
+    enabled: ${LIQUIBASE_ENABLED:true}
+    change-log: ${LIQUIBASE_CHANGELOG:classpath:/db/changelog/db.changelog-master.yaml}
+
 springdoc:
   api-docs:
-    path: /v3/api-docs
+    path: ${SPRINGDOC_API_DOCS_PATH:/v3/api-docs}
   swagger-ui:
-    path: /swagger-ui.html
-    operationsSorter: method
-    tagsSorter: alpha
+    path: ${SPRINGDOC_SWAGGER_UI_PATH:/swagger-ui.html}
+    operationsSorter: ${SPRINGDOC_OPERATIONS_SORTER:method}
+    tagsSorter: ${SPRINGDOC_TAGS_SORTER:alpha}
+
 logging:
   level:
-    liquibase: DEBUG
-    org.springframework.security: DEBUG
-    org.springframework.web: INFO
-    org.springframework.boot.autoconfigure.security: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.orm.jdbc.bind: TRACE
+    liquibase: ${LOG_LIQUIBASE_LEVEL:DEBUG}
+    org.springframework.security: ${LOG_SPRING_SECURITY_LEVEL:DEBUG}
+    org.springframework.web: ${LOG_SPRING_WEB_LEVEL:INFO}
+    org.springframework.boot.autoconfigure.security: ${LOG_SECURITY_AUTOCONFIG_LEVEL:DEBUG}
+    org.hibernate.SQL: ${LOG_HIBERNATE_SQL_LEVEL:DEBUG}
+    org.hibernate.orm.jdbc.bind: ${LOG_HIBERNATE_BIND_LEVEL:TRACE}
 
 security:
   jwt:
-    issuer: "VerySecureIssuer"
-    secret: "CHANGE_ME_very_long_random_secret_min_32_chars"
-    access-token-ttl-minutes: 60
+    issuer: ${JWT_ISSUER:VerySecureIssuer}
+    secret: ${JWT_SECRET:CHANGE_ME_very_long_random_secret_min_32_chars}
+    access-token-ttl-minutes: ${JWT_ACCESS_TTL_MINUTES:60}

@@ -1,15 +1,22 @@
 spring:
-  messages:
-    basename: messages
-    encoding: UTF-8
-  application:
-    name: transportation-service
-
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:transportation-db
     driver-class-name: org.h2.Driver
     username: sa
     password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        default_batch_fetch_size: 50
+
+  liquibase:
+    enabled: false

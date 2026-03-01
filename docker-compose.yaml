@@ -32,6 +32,32 @@ services:
     volumes:
       - transportation_pgadmin_data:/var/lib/pgadmin
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: transportation-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: stb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/transportation
+      SPRING_DATASOURCE_USERNAME: transportation_user
+      SPRING_DATASOURCE_PASSWORD: transportation_pass
+
+      # Liquibase / JPA
+      LIQUIBASE_ENABLED: "true"
+      JPA_DDL_AUTO: "validate"
+
+      JWT_ISSUER: "transportation-service"
+      JWT_SECRET: "CHANGE_ME_super_long_random_secret_min_32_chars"
+      JWT_ACCESS_TTL_MINUTES: "60"
+      JAVA_OPTS: "-Xms256m -Xmx512m"
+
 volumes:
   transportation_pg_data:
   transportation_pgadmin_data:
