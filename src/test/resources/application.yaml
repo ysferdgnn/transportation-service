@@ -1,0 +1,32 @@
+# Test ortamı: H2 in-memory, Liquibase kapalı, JWT test değerleri
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+  liquibase:
+    enabled: false
+
+  h2:
+    console:
+      enabled: false
+
+security:
+  jwt:
+    issuer: test-issuer
+    secret: test-secret-min-32-characters-long
+    access-token-ttl-minutes: 60
+
+logging:
+  level:
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN

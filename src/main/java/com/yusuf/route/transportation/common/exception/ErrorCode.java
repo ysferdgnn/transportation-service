@@ -28,6 +28,12 @@ public enum ErrorCode {
             HttpStatus.BAD_REQUEST
     ),
 
+    FLIGHT_REQUIRES_AIRPORT(
+            "FLIGHT_REQUIRES_AIRPORT",
+            "Flight can only be defined between airport locations; both origin and destination must be of type AIRPORT",
+            HttpStatus.BAD_REQUEST
+    ),
+
     INVALID_REQUEST(
             "INVALID_REQUEST",
             "Request validation failed",

@@ -1,13 +1,16 @@
 package com.yusuf.route.transportation.transportation.service;
 
 
+import com.yusuf.route.transportation.common.exception.FlightRequiresAirportException;
 import com.yusuf.route.transportation.common.exception.LocationNotFoundException;
 import com.yusuf.route.transportation.common.exception.OperationDaysRangeException;
 import com.yusuf.route.transportation.location.entity.Location;
+import com.yusuf.route.transportation.location.enums.LocationType;
 import com.yusuf.route.transportation.location.repository.LocationRepository;
 import com.yusuf.route.transportation.transportation.dto.TransportationCreateRequest;
 import com.yusuf.route.transportation.transportation.dto.TransportationResponse;
 import com.yusuf.route.transportation.transportation.entity.Transportation;
+import com.yusuf.route.transportation.transportation.enums.TransportationType;
 import com.yusuf.route.transportation.transportation.repository.TransportationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,12 @@ public class TransportationService {
                 .findByLocationCode(request.destinationCode())
                 .orElseThrow(LocationNotFoundException::new);
 
+        if (request.type() == TransportationType.FLIGHT) {
+            if (origin.getType() != LocationType.AIRPORT || destination.getType() != LocationType.AIRPORT) {
+                throw new FlightRequiresAirportException();
+            }
+        }
+
         validateDays(request.operatingDays());
 
         Transportation entity = Transportation.builder()
@@ -44,9 +53,9 @@ public class TransportationService {
                 .operatingDays(request.operatingDays())
                 .build();
 
-        transportationRepository.save(entity);
+        Transportation saved = transportationRepository.save(entity);
 
-        return map(entity);
+        return map(saved);
     }
 
     // LIST
