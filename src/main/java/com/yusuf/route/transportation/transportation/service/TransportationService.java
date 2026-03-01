@@ -13,6 +13,7 @@ import com.yusuf.route.transportation.transportation.entity.Transportation;
 import com.yusuf.route.transportation.transportation.enums.TransportationType;
 import com.yusuf.route.transportation.transportation.repository.TransportationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ public class TransportationService {
     private final LocationRepository locationRepository;
 
     // CREATE
+    @CacheEvict(cacheNames = "routes", allEntries = true)
     public TransportationResponse create(TransportationCreateRequest request) {
 
         Location origin = locationRepository
@@ -77,6 +79,7 @@ public class TransportationService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = "routes", allEntries = true)
     public void delete(Long id) {
         transportationRepository.deleteById(id);
     }
