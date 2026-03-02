@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
     info = @Info(title = "API", version = "v1"),
-    security = { @SecurityRequirement(name = "bearerAuth") } // tüm endpoint'lere uygular
+    security = { @SecurityRequirement(name = "bearerAuth") }
 )
 @SecurityScheme(
     name = "bearerAuth",
